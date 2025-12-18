@@ -1,0 +1,34 @@
+?start: statement*
+
+?statement: const_decl
+          | value
+          | COMMENT
+
+const_decl: NAME IS value
+
+IS: "is"
+
+?value: number
+      | string
+      | dict
+      | const_ref
+
+dict: "[" [pair ("," pair)*] "]"
+pair: NAME "=>" value
+
+const_ref: "${" NAME "}"
+
+number: BIN_NUMBER
+string: STRING
+
+BIN_NUMBER: "0b" /[01]+/
+
+NAME: /[a-zA-Z][a-zA-Z0-9]*/
+
+COMMENT: LINE_COMMENT | BLOCK_COMMENT
+LINE_COMMENT: "--" /[^\n]*/
+BLOCK_COMMENT: "{!" /(.|\n)*?/ "!}"
+
+STRING: "'" /[^']*/ "'"
+
+%ignore /[ \t\r\n]+/
